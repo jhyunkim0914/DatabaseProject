@@ -4,7 +4,6 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-
   res.render('index', { user: req.session.user, title: '아르바이트 도우미' });
 });
 
@@ -24,11 +23,19 @@ router.get('/logout', function(req, res, next) {
 
 /* Login page. */
 router.get('/workerindex', function(req, res, next) {
-  res.render('workerindex', { title: '아르바이트 도우미' });
+  res.render('workerindex', { user: req.session.user, title: '아르바이트 도우미' });
 });
 
 router.get('/worklist', function(req, res, next) {
-  res.render('worklist', { title: '아르바이트 도우미' });
+  res.render('worklist', { user: req.session.user, title: '아르바이트 도우미' });
+});
+
+router.get('/recruitinfo/contractid=:contractid', function(req, res, next) {
+  res.render('recruit', { user: req.session.user, contractid: req.params.contractid, title: '아르바이트 도우미' });
+});
+
+router.get('/ownerindex', function(req, res, next) {
+  res.render('ownerindex', { user: req.session.user, title: '아르바이트 도우미' });
 });
 
 module.exports = router;

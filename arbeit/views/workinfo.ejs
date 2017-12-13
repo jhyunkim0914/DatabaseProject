@@ -1,0 +1,286 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Dashboard Template for Bootstrap</title>
+
+    <!-- 합쳐지고 최소화된 최신 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+    <!-- 부가적인 테마 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+    <!-- jQuery File -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+    <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+    <!-- Custom styles for this template -->
+    <link href="/stylesheets/dashboard.css" rel="stylesheet">
+
+    <style>
+      table#title
+      {
+      	border: 1px solid black;
+      	width: 60%;
+      	height: 50px;
+      	margin: auto;
+      	text-align: center;
+      	font-weight: bold;
+      	font-size: 20px;
+      }
+      table#worktime
+      {
+      	border: 1px solid black;
+      	width: 80%;
+      	height: 80px;
+      	margin: auto;
+      	text-align: center;
+      }
+      table#sign
+      {
+      	border: 1px solid black;
+      	width: 80%;
+      	height: 80px;
+      	margin: auto;
+      	text-align: center;
+      }
+      table#sign tr td.type
+      {
+      	width: 45px;
+      }
+      p.etc
+      {
+      	line-height:30%;
+      }
+    </style>
+
+    <script>
+
+      $(document).ready(function(){
+        var startDateString = contract.start_date.getFullYear()+"년 "+contract.start_date.getMonth()+"월 "+contract.start_date.getDate()+"일";
+        var endDateString = contract.end_date.getFullYear()+"년 "+contract.end_date.getMonth()+"월 "+contract.end_date.getDate()+"일";
+        var contDateString = contract.contract_date.getFullYear()+"년 "+contract.contract_date.getMonth()+"월 "+contract.contract_date.getDate()+"일";
+        var workHour = [];
+
+         window.$("span#ownerName").text(owner.name);
+         window.$("span#workerName").text(worker.name);
+         window.$("span#startDate").text(startDateString);
+         window.$("span#endDate").text(endDateString);
+         window.$("p#workAddress").text(owner.address);
+         window.$("p#workContent").text(contract.content);
+                                         //근무 시간 채우기
+                                         var work_time = 0;
+                                         for(var i=0; i<7; i++) {
+                                           var endTime = contract.working_time[2*i+1].split(":");
+                                           var startTime = contract.working_time[2*i].split(":");
+                                           var t2 = new Date();t2.setHours(endTime[1], endTime[0],0,0);
+                                           var t1 = new Date();t1.setHours(startTime[1], startTime[0],0,0);
+                                           workHour = (t2.getTime()-t1.getTime())/1000/60;
+
+                                           window.$("table#worktime tr.startTime td").eq(i+1).text(contract.working_time[2*i]);
+                                           window.$("table#worktime tr.endTime td").eq(i+1).text(contract.working_time[2*i+1]);
+                                           window.$("table#worktime tr.workHour td").eq(i+1).text(workHour+"시간");
+                                         }
+                                         window.$("span#howtoPay").text(contract.howto_pay);
+                                         window.$("span#wage").text(contract.wage);
+                                         window.$("span#bonus").text(contract.bonus);
+                                         window.$("span#otherPay").text(contract.other_pay);
+                                         window.$("span#bonusRate").text(contract.bonus_rate);
+                                        //사회보험 조항 채우기
+
+                                        //socialInsurance의 순서는 고용보험,산재보험,국민연금,건강보험이다.
+                                        //socialInsurance[i]에 따라서 해당 보험 적용, 미적용으로 표현
+                                        var insuranceText = ["고용보험 ","산재보험 ","국민연금 ","건강보험 "];
+                                        for(var i=0; i<4; i++) {
+                                          if(contract.social_insurance[i] == 0)
+                                            insuranceText[i] += "미적용"
+                                          else if(contract.social_insurance[i] == 1)
+                                            insuranceText[i] += "적용"
+                                        }
+                                         window.$("p#insuranceText").text(insuranceText);
+                                         window.$("span#companyName").text(owner.company);
+                                         window.$("span#ownerPhone").text(owner.phone);
+                                         window.$("span#ownerAddress").text(owner.address);
+                                         window.$("span#ownerName2").text(owner.name);
+                                         window.$("span#workerAddress").text(worker.address);
+                                         window.$("span#workerPhone").text(worker.phone);
+                                         window.$("span#workerName2").text(worker.name);
+
+
+                                         callback(null,window.$("*").html());
+
+      });
+
+    </script>
+
+  </head>
+
+  <body>
+
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Project name</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#">Help</a></li>
+            <li><a href="#">Logout</a></li>
+          </ul>
+          <form class="navbar-form navbar-right">
+            <input type="text" class="form-control" placeholder="Search...">
+          </form>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+            <li class="active"><a href="#">홈</a></li>
+            <li><a href="#">채용공고 보기 <span class="sr-only">(current)</span> </a></li>
+            <li><a href="#">근로계약서 보기</a></li>
+            <li><a href="#">리뷰 보기</a></li>
+            <li><a href="#">마이 페이지</a></li>
+          </ul>
+        </div>
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h1 class="page-header">고용정보</h1>
+
+          <h2 class="sub-header">고용정보2</h2>
+          <div class="table-responsive">
+            <div id="main" style="height: 329px; ">
+              <table id="title">
+                <tr>
+                  <td>단시간근로자 표준근로계약서</td>
+                </tr>
+              </table>
+              <p><span id="ownerName">가나다</span>(이하 “사업주”라 함)과(와)<span id="workerName">김우재</span>(이하 “근로자”라 함)은 다음과 같이 근로계약을 체결한다.</p>
+              <p>1. 근로계약기간 : <span id="startDate"></span>부터  <span id="endDate"></span>까지</p>
+              <p class="etc"> ※ 근로계약기간을 정하지 않는 경우에는 “근로개시일”만 기재</p>
+              <p>2. 근 무 장 소 : </p>
+              <p id="workAddress"></p>
+              <p>3. 업무의 내용 : </p>
+              <p id="workContent"></p>
+              <p>4. 근로일 및 근로일별 근로시간</p>
+              <table id="worktime">
+                <tr>
+                  <td></td>
+                  <td>일요일</td>
+                  <td>월요일</td>
+                  <td>화요일</td>
+                  <td>수요일</td>
+                  <td>목요일</td>
+                  <td>금요일</td>
+                  <td>토요일</td>
+                </tr>
+                <tr class="workHour">
+                  <td>근로시간</td>
+                  <td>0시간</td>
+                  <td>0시간</td>
+                  <td>0시간</td>
+                  <td>0시간</td>
+                  <td>0시간</td>
+                  <td>0시간</td>
+                  <td>0시간</td>
+                </tr>
+                <tr class="startTime">
+                  <td>시업</td>
+                  <td>12시 00분</td>
+                  <td>12시 00분</td>
+                  <td>12시 00분</td>
+                  <td>12시 00분</td>
+                  <td>12시 00분</td>
+                  <td>12시 00분</td>
+                  <td>12시 00분</td>
+                </tr>
+                <tr class="endTime">
+                  <td>종업</td>
+                  <td>12시 00분</td>
+                  <td>12시 00분</td>
+                  <td>12시 00분</td>
+                  <td>12시 00분</td>
+                  <td>12시 00분</td>
+                  <td>12시 00분</td>
+                  <td>12시 00분</td>
+                </tr>
+              </table>
+              <p>5. 임  금</p>
+              <div>
+                <p class="etc">&nbsp;&nbsp;- 시간<span id="howtoPay"></span>급 : <span id="wage"></span>원</p>
+                <p class="etc">&nbsp;&nbsp;- 상여금 : <span id="bonus"></span>원 </p>
+                <p class="etc">&nbsp;&nbsp;- 기타급여 : <span id="otherPay"></span>원 </p>
+                <p class="etc">&nbsp;&nbsp;- 초과근로에 대한 가산임금률 : <span id="bonusRate"></span>%</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;※ 단시간근로자와 사용자 사이에 근로하기로 정한 시간을 초과하여 근로하면 법정 근로시간 내라도 통상임금의 100분의 50%이상의 가산임금 지급(’14.9.19. 시행)</p>
+              </div>
+              <p>6. 연차유급휴가: 통상근로자의 근로시간에 비례하여 연차유급휴가 부여</p>
+              <p>7. 사회보험 적용여부</p>
+              <p id="insuranceText"> □ 고용보험  □ 산재보험  □ 국민연금  □ 건강보험 </p>
+              <p>8. 근로계약서 교부<br/>
+              &nbsp;&nbsp;&nbsp;&nbsp;  - “사업주”는 근로계약을 체결함과 동시에 본 계약서를 사본하여 “근로자”의 교부요구와 관계없이 “근로자”에게 교부함(근로기준법 제17조 이행)
+              </p>
+              <p>9. 기  타<br/>
+              &nbsp;&nbsp;&nbsp;&nbsp;  - 이 계약에 정함이 없는 사항은 근로기준법령에 의함.
+              </p>
+              <p STYLE='margin-top:10.0pt;text-align:center;'><span id="contractDate">2016년 12월 31일</span></p>
+              <table id="sign">
+                <tr>
+                  <td class='type' rowspan='3'>사업주</td>
+                  <td>사업체명 : </td>
+                  <td><span id="companyName"></span></td>
+                  <td>(전화 : <span id="ownerPhone">010-0000-0000</span>)</td>
+                </tr>
+                <tr>
+                  <td>주소 : </td>
+                  <td><span id="ownerAddress"></span></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>대표자 : </td>
+                  <td><span id="ownerName2"></span></td>
+                  <td>(서명)</td>
+                </tr>
+                <tr>
+                  <td class='type' rowspan='3'>근로자</td>
+                  <td>주소 : </td>
+                  <td><span id="workerAddress"></span></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>연락처 : </td>
+                  <td><span id="workerPhone"></span></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>성명 : </td>
+                  <td><span id="workerName2"></span></td>
+                  <td>(서명)</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </body>
+</html>

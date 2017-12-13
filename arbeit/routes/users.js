@@ -85,7 +85,10 @@ router.post('/login', function(req, res, next) {
     else {
       req.session.user = rows[0];
       //console.log(req.session.user.role);
-      res.render('index', { title: '아르바이트',  user: req.session.user});
+      if(req.session.user.role = "worker")
+        res.render('workerindex', { title: '아르바이트',  user: req.session.user});
+      if(req.session.user.role = "owner")
+        res.render('ownerindex', { title: '아르바이트',  user: req.session.user});
     }
   });
 });

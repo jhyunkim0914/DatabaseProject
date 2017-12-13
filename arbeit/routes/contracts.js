@@ -20,7 +20,9 @@ router.get('/', function(req, res, next) {
 
 /* GET contract listing. */
 router.get('/ongoinglist', function(req, res, next) {
-  var sql = 'SELECT * FROM contract c, user u WHERE c.ownerid = u.userid AND contractstate = "ONGOING"';
+  var sql = 'SELECT c.contractid, c.content, owner.name, owner.companyname, owner.companyid, owner.phone '+
+            'FROM contract c JOIN user owner LEFT JOIN user worker ON (c.workerid=worker.userid) '+
+            'WHERE c.ownerid = owner.userid AND contractstate = "ONGOING"';
   console.log(sql);
 
   var query = connection.query(sql, function(err,rows){
@@ -32,9 +34,9 @@ router.get('/ongoinglist', function(req, res, next) {
   });
 });
 
-/* GET users by userid. */
-router.get('/idx=:userid', function(req, res, next) {
-  var sql = 'SELECT * FROM user WHERE userid ='+mysql.escape(req.params.userid);
+/* GET users by contractid. */
+router.get('/contractid=:contractid', function(req, res, next) {
+  var sql = 'SELECT * FROM contract WHERE contractid ='+mysql.escape(req.params.contractid);
   console.log(sql);
 
   var query = connection.query(sql, function(err,row){
@@ -43,6 +45,23 @@ router.get('/idx=:userid', function(req, res, next) {
     }
     console.log(row);
     res.json(row);
+  });
+});
+
+/* GET users by contractid. */
+router.get('/recruitformat=:contractid', function(req, res, next) {
+  var sql = "select contractid,ownerid, owner.name as name, owner.phone as phone, owner.address as address"+
+       ",content,workingtime,wagetiming,wage,bonus,otherpay,bonusrate,payday,howtopay,socialinsurance"+
+       ",DATE_FORMAT(startdate, '%Y-%m-%d') as startdate,DATE_FORMAT(enddate, '%Y-%m-%d') as enddate,DATE_FORMAT(contractdate, '%Y-%m-%d') as contractdate "+
+       "from contract c, user owner where c.ownerid=owner.userid and c.contractid = "+mysql.escape(req.params.contractid);
+  console.log(sql);
+
+  var query = connection.query(sql, function(err,row){
+    if (err) {
+      console.error(err);
+    }
+    console.log(row);
+    res.json(row[0]);
   });
 });
 
@@ -83,27 +102,5 @@ router.post('/', function(req, res, next) {
     });
 
 });
-
-/* POST users and get login check */
-router.post('/login', function(req, res, next) {
-  var sql = 'SELECT * FROM user WHERE id = '+mysql.escape(req.body.id)+' AND password = '+mysql.escape(req.body.password)+'';
-
-  console.log(sql);
-  var query = connection.query(sql, function(err,rows){
-    if (err) {
-      console.error(err);
-    }
-    if (rows.length == 0) {
-      res.json({result: "login fail"});
-    }
-    else {
-      req.session.user = rows[0];
-      //console.log(req.session.user.role);
-      res.render('index', { title: '아르바이트',  user: req.session.user});
-    }
-  });
-});
-
-
 
 module.exports = router;
