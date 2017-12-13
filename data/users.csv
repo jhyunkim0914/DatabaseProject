@@ -1,0 +1,4 @@
+userid,id,password,name,address,email,phone,companyname,companyid,role
+1,employee1,1234,김재현,이매동,jhyeon156@gmail.com,01022890223,NULL,NULL,worker
+2,company1,1234,김유민,영통동,kym@gmail.com,01032849282,경희대,002-3232-554,owner
+3,employee2,1234,김가나,무슨동,jfdsf@gmail.com,01023234343,NULL,NULL,worker

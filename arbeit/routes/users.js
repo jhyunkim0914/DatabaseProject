@@ -87,6 +87,25 @@ router.post('/login', function(req, res, next) {
       //console.log(req.session.user.role);
       if(req.session.user.role = "worker")
         res.render('workerindex', { title: '아르바이트',  user: req.session.user});
+    }
+  });
+});
+
+/* POST users and get login check */
+router.post('/ownerlogin', function(req, res, next) {
+  var sql = 'SELECT * FROM user WHERE id = '+mysql.escape(req.body.id)+' AND password = '+mysql.escape(req.body.password)+'';
+
+  console.log(sql);
+  var query = connection.query(sql, function(err,rows){
+    if (err) {
+      console.error(err);
+    }
+    if (rows.length == 0) {
+      res.json({result: "login fail"});
+    }
+    else {
+      req.session.user = rows[0];
+      //console.log(req.session.user.role);
       if(req.session.user.role = "owner")
         res.render('ownerindex', { title: '아르바이트',  user: req.session.user});
     }

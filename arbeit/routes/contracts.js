@@ -83,17 +83,23 @@ router.get('/userid=:id', function(req, res, next) {
 /* POST users and insert row. */
 router.post('/', function(req, res, next) {
   var user = {
-              'id':req.body.id,
-              'password':req.body.password,
-              'name':req.body.name,
-              'address':req.body.address,
-              'email':req.body.email,
-              'phone':req.body.phone,
-              'companyname':req.body.companyname,
-              'companyid':req.body.companyid,
-              'role':req.body.role
+                'ownerid': req.body.ownerid,
+                'startdate': req.body.startdate,
+                'enddate': req.body.enddate,
+                'content': req.body.content,
+                'workingtime': req.body.workingtime,
+                'wagetiming': req.body.wagetiming,
+                'wage': req.body.wage,
+                'bonus': req.body.bonus,
+                'otherpay': req.body.otherpay,
+                'bonusrate': req.body.bonusrate,
+                'payday': req.body.payday,
+                'howtopay': req.body.howtopay,
+                'socialinsurance': req.body.socialinsurance,
+                'contractdate': req.body.contractdate,
+                'contractstate': 'ONGOING',
              };
-    var query = connection.query('insert into user set ?',user,function(err,result){
+    var query = connection.query('insert into contract set ?',user,function(err,result){
     if (err) {
     console.error(err);
     throw err;

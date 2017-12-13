@@ -1,0 +1,4 @@
+contractid,workerid,ownerid,startdate,enddate,content,workingtime,wagetiming,wage,bonus,otherpay,bonusrate,payday,howtopay,socialinsurance,contractdate,contractstate
+1,NULL,2,2017-01-01,2018-01-01,sadfsadfsdafasdfsdaf,1800,20,20000,10,230,10,2,A,"1,0,0,0","2016-12-01 00:00:00",ONGOING
+2,1,2,2017-01-01,2018-01-01,sadfsadfsadfsadf,1800,10,10000,5,250,15,2,B,0.1.0.0,"2016-12-02 00:00:00",ONGOING
+3,3,2,2017-01-01,2018-01-01,sadfsadfsadfsadf,1500,10,15000,5,250,15,2,B,0.1.0.0,"2016-12-02 00:00:00",FINISHED

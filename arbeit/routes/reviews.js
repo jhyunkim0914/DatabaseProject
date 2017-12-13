@@ -20,7 +20,7 @@ router.get('/', function(req, res, next) {
 
 /*Get review lists*/
 router.get('/reviewlist', function(req, res, next) {
-  var sql = 'select u.companyname as companyname, AVG(r.ratingpoint) as rates from Review r join contract c on r.contractid = c.contractid join  user u on c.ownerid = u.companyid group by u.companyname  order by AVG(r.ratingpoint) desc';
+  var sql = 'select u.companyname as companyname, AVG(r.ratingpoint) as rates, r.reviewid from Review r join contract c on r.contractid = c.contractid join  user u on c.ownerid = u.companyid group by u.companyname  order by AVG(r.ratingpoint) desc';
   console.log(sql);
 
   var query = connection.query(sql, function(err,rows){
@@ -32,9 +32,12 @@ router.get('/reviewlist', function(req, res, next) {
   });
 });
 
-/* GET review by id. */
-router.get('/:id', function(req, res, next) {
-  var sql = 'SELECT * FROM review WHERE reviewid ='+mysql.escape(req.params.id);
+/*Get specific reviews*/
+  router.get('/specific', function(req, res, next) {
+  var sql = "select r.userid as id, u.companyname as companyname, r.ratingpoint as rate"+
+    " , r.content as content, date_format(r.date, '%Y-%m-%d') as date"+
+"  from Review r join contract c on r.contractid = c.contractid join  user u on c.ownerid = u.companyid  "+
+" group by u.companyname   order by r.date desc"
   console.log(sql);
 
   var query = connection.query(sql, function(err,rows){

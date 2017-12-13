@@ -1,0 +1,96 @@
+﻿-- 테이블 순서는 관계를 고려하여 한 번에 실행해도 에러가 발생하지 않게 정렬되었습니다.
+
+-- Role Table Create SQL
+CREATE TABLE Role
+(
+    `role`  VARCHAR(20)    NOT NULL, 
+    `name`  VARCHAR(20)    NULL, 
+    PRIMARY KEY (role)
+);
+
+
+-- User Table Create SQL
+CREATE TABLE User
+(
+    `userid`       INT             NOT NULL    AUTO_INCREMENT, 
+    `id`           VARCHAR(20)     NOT NULL, 
+    `password`     VARCHAR(20)     NULL, 
+    `name`         VARCHAR(50)     NULL, 
+    `address`      VARCHAR(100)    NULL, 
+    `email`        VARCHAR(50)     NULL, 
+    `phone`        VARCHAR(20)     NULL, 
+    `companyname`  VARCHAR(50)     NULL, 
+    `companyid`    VARCHAR(20)     NULL, 
+    `role`         VARCHAR(20)     NULL, 
+    PRIMARY KEY (userid, id)
+);
+
+ALTER TABLE User ADD CONSTRAINT FK_User_role_Role_role FOREIGN KEY (role)
+ REFERENCES Role (role)  ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+-- Contract Table Create SQL
+CREATE TABLE Contract
+(
+    `contractid`       INT             NOT NULL    AUTO_INCREMENT, 
+    `workerid`         INT             NULL, 
+    `ownerid`          INT             NULL, 
+    `startdate`        DATE            NULL, 
+    `enddate`          DATE            NULL, 
+    `content`          VARCHAR(200)    NULL, 
+    `workingtime`      VARCHAR(200)    NULL, 
+    `wagetiming`       VARCHAR(45)     NULL, 
+    `wage`             INT             NULL, 
+    `bonus`            INT             NULL, 
+    `otherpay`         INT             NULL, 
+    `bonusrate`        INT             NULL, 
+    `payday`           VARCHAR(45)     NULL, 
+    `howtopay`         VARCHAR(45)     NULL, 
+    `socialinsurance`  VARCHAR(45)     NULL, 
+    `contractdate`     DATETIME        NULL, 
+    `contractstate`    VARCHAR(45)     NULL, 
+    PRIMARY KEY (contractid)
+);
+
+ALTER TABLE Contract ADD CONSTRAINT FK_Contract_workerid_User_userid FOREIGN KEY (workerid)
+ REFERENCES User (userid)  ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE Contract ADD CONSTRAINT FK_Contract_ownerid_User_userid FOREIGN KEY (ownerid)
+ REFERENCES User (userid)  ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+-- Review Table Create SQL
+CREATE TABLE Review
+(
+    `reviewid`     INT             NOT NULL    AUTO_INCREMENT, 
+    `contractid`   INT             NULL, 
+    `content`      VARCHAR(200)    NULL, 
+    `reviewstate`  VARCHAR(45)     NULL, 
+    `date`         DATE            NULL, 
+    `ratingpoint`  INT             NULL, 
+    `userid`       INT             NULL, 
+    PRIMARY KEY (reviewid)
+);
+
+ALTER TABLE Review ADD CONSTRAINT FK_Review_contractid_Contract_contractid FOREIGN KEY (contractid)
+ REFERENCES Contract (contractid)  ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE Review ADD CONSTRAINT FK_Review_userid_User_userid FOREIGN KEY (userid)
+ REFERENCES User (userid)  ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+-- candidate Table Create SQL
+CREATE TABLE candidate
+(
+    `contractid`      INT            NULL, 
+    `workerid`        INT            NOT NULL, 
+    `candidatestate`  VARCHAR(20)    NULL    
+);
+
+ALTER TABLE candidate ADD CONSTRAINT FK_candidate_contractid_Contract_contractid FOREIGN KEY (contractid)
+ REFERENCES Contract (contractid)  ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE candidate ADD CONSTRAINT FK_candidate_workerid_User_userid FOREIGN KEY (workerid)
+ REFERENCES User (userid)  ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+

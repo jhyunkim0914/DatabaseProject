@@ -1,48 +1,36 @@
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+  <head>specificreviews
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-
     <title>Dashboard Template for Bootstrap</title>
-
     <!-- 합쳐지고 최소화된 최신 CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-
     <!-- 부가적인 테마 -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-
     <!-- jQuery File -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-
     <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-
     <!-- Custom styles for this template -->
     <link href="/stylesheets/dashboard.css" rel="stylesheet">
 
     <script>
-
-      function seereview(reviewid){
-        location.href = "/specificreviews"
-      }
-
       $(document).ready(function(){
-
         $.ajax({
-            url: "/reviews/reviewlist",
+            url: "/reviews/specific",
             data: {
             },
             success: function( result ) {
-              console.log(result);
+              console.log(result)
               var $table = $("table#worklist tbody");
               jQuery.each(result, function(index) {
-                $table.append($("<tr><td>" + (index+1) + "</td><td>" + this.companyname + "</td><td>"+ this.rates +"</td><td><button class='btn btn-default' onclick='seereview("+this.reviewid+")'>보기</button></td></tr>"));
+                $table.append($("<tr><td>" + (index+1) + "</td><td>" + this.id +"</td><td>" + this.companyname +"</td><td>" + this.content+"</td><td>"+ this.rate+"</td><td>" + this.date+"</td></tr>"));
                 console.log(this);
               });
             }
@@ -93,17 +81,19 @@
         </div>
 
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">Dashboard</h1>
+          <h1 class="page-header">Reviews</h1>
 
-          <h2 class="sub-header">Section title</h2>
+          <h2 class="sub-header">sorting by scores</h2>
           <div class="table-responsive">
             <table id="worklist" class="table table-striped">
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>Company Owner</th>
+                  <th>writer</th>
                   <th>Company Name</th>
                   <th>Contents</th>
+                  <th>Rate</th>
+                  <th>Date</th>
                 </tr>
               </thead>
               <tbody>
