@@ -1,0 +1,164 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Dashboard Template for Bootstrap</title>
+
+    <!-- 합쳐지고 최소화된 최신 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+    <!-- 부가적인 테마 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+    <!-- jQuery File -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+    <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+    <!-- Custom styles for this template -->
+    <link href="/stylesheets/dashboard.css" rel="stylesheet">
+
+    <script>
+
+      function accept(contract_id, worker_id) {
+        $.ajax({
+          url: "/candidates",
+          method: "PUT",
+          data: {
+            contractid: contract_id,
+            workerid: worker_id
+          },
+          success: function( result ) {
+            console.log(result);
+            alert("수락완료!");
+            location.href = "/ownerindex";
+          },
+          error: function( error ) {
+            console.log(error)
+          }
+        });
+      }
+
+      $(document).ready(function(){
+        $.ajax({
+            url: "/candidates/ownerid=<%= user.userid %>",
+            data: {
+            },
+            success: function( result ) {
+              var $table = $("table#ownerlist tbody");
+              jQuery.each(result, function(index) {
+                var $tr = $("<tr></tr>");
+                var $td = $("<td></td>");
+
+                var $indextd = $td.clone(true);
+                $indextd.text((index+1));
+                $tr.append($indextd);
+                var $nametd = $td.clone(true);
+                $nametd.text(this.name);
+                $tr.append($nametd);
+                var $emailtd = $td.clone(true);
+                $emailtd.text(this.email);
+                $tr.append($emailtd);
+                var $phonetd = $td.clone(true);
+                $phonetd.text(this.phone);
+                $tr.append($phonetd);
+                if(this.candidatestate != "accepted") {
+                  var $buttontd = $td.clone(true);
+                  var $button = $("<button class='btn btn-default' onclick='accept(" + this.contractid + "," + this.workerid +  ")''></button>");
+                  $button.text("수락");
+                  $buttontd.append($button);
+                  $tr.append($buttontd);
+                } else {
+                  var $buttontd = $td.clone(true);
+                  var $button = $("<button class='btn btn-default' onclick='accept(" + this.contractid + "," + this.workerid +  ")''></button>");
+                  $button.text("수락");
+                  $buttontd.append($button);
+                  $tr.append($buttontd);
+                }
+
+
+                $table.append($tr);
+
+                console.log(this);
+              });
+            }
+          });
+        });
+
+    </script>
+
+  </head>
+
+  <body>
+
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Project name</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#">Help</a></li>
+            <li><a href="/logout">Logout</a></li>
+          </ul>
+          <form class="navbar-form navbar-right">
+            <input type="text" class="form-control" placeholder="Search...">
+          </form>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+            <li class="active"><a href="#">홈</a></li>
+            <li><a href="/makeContract">채용공고 만들기 <span class="sr-only">(current)</span> </a></li>
+            <li><a href="/workinfo=1">근로계약서 보기</a></li>
+            <li><a href="#">리뷰 보기</a></li>
+            <li><a href="#">마이 페이지</a></li>
+          </ul>
+        </div>
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h1 class="page-header">사용자 메인</h1>
+
+          <h2 class="sub-header">지원자 리스트</h2>
+          <div class="table-responsive">
+            <table id="ownerlist" class="table table-striped">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>ACCEPT</th>
+                </tr>
+              </thead>
+              <tbody>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </body>
+</html>

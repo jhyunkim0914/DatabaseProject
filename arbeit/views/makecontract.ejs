@@ -1,0 +1,297 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Dashboard Template for Bootstrap</title>
+
+    <!-- 합쳐지고 최소화된 최신 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+    <!-- 부가적인 테마 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+    <!-- jQuery File -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+    <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+    <!-- Custom styles for this template -->
+    <link href="/stylesheets/dashboard.css" rel="stylesheet">
+
+    <script>
+
+    $(document).ready(function(){
+
+      var today = new Date();
+      var dd = today.getDate();
+      var mm = today.getMonth()+1; //January is 0!
+      var yyyy = today.getFullYear();
+
+      if(dd<10) {
+          dd='0'+dd
+      }
+
+      if(mm<10) {
+          mm='0'+mm
+      }
+
+      today = yyyy+'-'+mm+'-'+dd;
+
+      $("button#makeContract").click(function() {
+        var action = '/contracts';
+        var workingTimeForm='';
+        var socialInsuranceForm = '';
+        for(var i=0; i<14; i++){
+          workingTimeForm += $("[name=workingTime"+i+"]").val();
+          workingTimeForm += '/';
+        }
+        workingTimeForm = workingTimeForm.slice(0,-1);
+        for(var i=0; i<4; i++){
+          if($("[name=social_insurance"+i+"]").is(":checked")){
+            socialInsuranceForm += '1/'
+          }else{
+            socialInsuranceForm += '0/'
+          }
+        }
+        socialInsuranceForm = socialInsuranceForm.slice(0,-1);
+        var formData = {
+          ownerid: 2,
+          startdate: $("[name=start_date]").val(),
+          enddate: $("[name=start_date]").val(),
+          content: $("[name=content]").val(),
+          wagetiming: $("[name=wage_timing]").val(),
+          workingtime: workingTimeForm,
+          wage: $("[name=wage]").val(),
+          bonus: $("[name=bonus]").val(),
+          otherpay: $("[name=other_pay]").val(),
+          bonusrate: $("[name=bonus_rate]").val(),
+          payday: $("[name=payday]").val(),
+          howtopay: $("[name=howto_pay]").val(),
+          socialinsurance: socialInsuranceForm,
+          contractdate: today,
+          is_ajax: 1
+        };
+        $.ajax({
+          type: "POST",
+          url: action,
+          data: formData,
+          success:function(args){
+            alert("완료되었습니다.");
+            location.href = '/ownerindex';
+          }
+        });
+      });
+    });
+
+    </script>
+
+  </head>
+
+  <body>
+
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Project name</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#">Help</a></li>
+            <li><a href="/logout">Logout</a></li>
+          </ul>
+          <form class="navbar-form navbar-right">
+            <input type="text" class="form-control" placeholder="Search...">
+          </form>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+            <li class="active"><a href="#">홈</a></li>
+            <li><a href="#">채용공고 보기 <span class="sr-only">(current)</span> </a></li>
+            <li><a href="#">근로계약서 보기</a></li>
+            <li><a href="#">리뷰 보기</a></li>
+            <li><a href="#">마이 페이지</a></li>
+          </ul>
+        </div>
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+          <div class="container">
+            <h2>계약서 작성</h2>
+            <form id="makeContract">
+              <input type="hidden" name="owner_id" value="#{owner._id}">
+              <div class="form-group">
+                <label>계약 기간</label>
+                <input class="form-control" type="text" value="2015.11.21" name="start_date" placeholder="부터 ex)2016.12.4">
+                <input class="form-control" type="text" value="2017.11.21" name="end_date" placeholder="까지 ex)2017.11.14">
+              </div>
+              <div class="form-group">
+                <label>업무내용</label>
+                <input class="form-control" type="text" value="2sdafasdf" name="content" placeholder="업무내용">
+              </div>
+              <table class="table">
+                <div class="row" style="margin-top: 30px">
+                  <div class="col-sm-12">
+                    <label>근로시간</label>
+                    <thead>
+                      <tr>
+                        <th></th>
+                        <th>월</th>
+                        <th>화</th>
+                        <th>수</th>
+                        <th>목</th>
+                        <th>금</th>
+                        <th>토</th>
+                        <th>일</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>시업</td>
+                        <td>
+                          <input class="form-control" type="text" value="12:00" name="workingTime0" placeholder="월">
+                        </td>
+                        <td>
+                          <input class="form-control" type="text" value="13:00" name="workingTime2" placeholder="화">
+                        </td>
+                        <td>
+                          <input class="form-control" type="text" value="14:00" name="workingTime4" placeholder="수">
+                        </td>
+                        <td>
+                          <input class="form-control" type="text" value="15:00" name="workingTime6" placeholder="목">
+                        </td>
+                        <td>
+                          <input class="form-control" type="text" value="16:00" name="workingTime8" placeholder="금">
+                        </td>
+                        <td>
+                          <input class="form-control" type="text" value="17:00" name="workingTime10" placeholder="토">
+                        </td>
+                        <td>
+                          <input class="form-control" type="text" value="18:00" name="workingTime12" placeholder="일">
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>종업</td>
+                        <td>
+                          <input class="form-control" type="text" value="14:00" name="workingTime1" placeholder="월">
+                        </td>
+                        <td>
+                          <input class="form-control" type="text" value="15:00" name="workingTime3" placeholder="화">
+                        </td>
+                        <td>
+                          <input class="form-control" type="text" value="16:00" name="workingTime5" placeholder="수">
+                        </td>
+                        <td>
+                          <input class="form-control" type="text" value="17:00" name="workingTime7" placeholder="목">
+                        </td>
+                        <td>
+                          <input class="form-control" type="text" value="18:00" name="workingTime9" placeholder="금">
+                        </td>
+                        <td>
+                          <input class="form-control" type="text" value="19:00" name="workingTime11" placeholder="토">
+                        </td>
+                        <td>
+                          <input class="form-control" type="text" value="20:00" name="workingTime13" placeholder="일">
+                        </td>
+                      </tr>
+                    </tbody>
+                  </div>
+                </div>
+              </table>
+              <label>임금</label>
+              <label>
+                <input type="radio" name="wage_timing" value="false"> 일급
+              </label>
+              <label>
+                <input type="radio" name="wage_timing" value="true">월급
+              </label>
+              <div class="form-group">
+                <input class="form-control" type="text" value="8400" name="wage" placeholder="임금">
+              </div>
+              <label>상여금</label>
+              <label>
+                <input type="radio" name="m_type" value="1">있음
+              </label>
+              <label>
+                <input type="radio" name="m_type" value="2">없음
+              </label>
+              <div class="form-group">
+                <input class="form-control" type="text" value="1000" name="bonus" placeholder="상여금">
+              </div>
+              <div class="form-group">
+                <label>기타급여</label>
+                <label>
+                  <input type="radio" name="m_type4" value="1">있음
+                </label>
+                <label>
+                  <input type="radio" name="m_type4" value="2">없음
+                </label>
+                <input class="form-control" type="text" value="2000" name="other_pay" placeholder="기타 급여">
+              </div>
+              <div class="form-group">
+                <label>초과근로에 대한 가산 임금률 (%)</label>
+                <input class="form-control" type="text" value="15" name="bonus_rate" placeholder="ex) 50">
+              </div>
+              <div class="form-group">
+                <label>임금지금일 : 매월(매주 또는 매일) / 휴일의 경우는 전일 지금</label>
+                <input class="form-control" type="text" value="3" name="payday" placeholder="ex) 14">
+              </div>
+              <div class="form-group">
+                <label>지급 방법</label>
+                <label>
+                  <input type="radio" name="howto_pay" value="현금지급">근로자에게 직접 지급
+                </label>
+                <label>
+                  <input type="radio" name="howto_pay" value="통장입굼">근로자 명의 예금 통장에 입금
+                </label>
+              </div>
+              <div>
+                <div class="form-group">
+                  <label>사회보험 적용여부</label>
+                </div>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="social_insurance0" value="1">           고용보험
+                </label>
+                <label>
+                  <input type="checkbox" name="social_insurance1" value="1">           산재보험
+                </label>
+                <label>
+                  <input type="checkbox" name="social_insurance2" value="1">           국민연금
+                </label>
+                <label>
+                  <input type="checkbox" name="social_insurance3" value="1">           건강보험
+                </label>
+              </div>
+              <input type="hidden" name="type" value="1">
+              <button class="btn btn-default" id="makeContract">제출</button>
+            </form>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </body>
+</html>
