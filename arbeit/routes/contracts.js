@@ -4,9 +4,23 @@ var mysql = require('mysql');
 var connection = mysql.createConnection(require('../config/dbconfig.js'));
 
 
-/* GET users listing. */
+/* GET contracts listing. */
 router.get('/', function(req, res, next) {
-  var sql = 'SELECT * FROM user';
+  var sql = 'SELECT * FROM contract';
+  console.log(sql);
+
+  var query = connection.query(sql, function(err,rows){
+    if (err) {
+      console.error(err);
+    }
+    console.log(rows);
+    res.json(rows);
+  });
+});
+
+/* GET contract listing. */
+router.get('/ongoinglist', function(req, res, next) {
+  var sql = 'SELECT * FROM contract c, user u WHERE c.ownerid = u.userid AND contractstate = "ONGOING"';
   console.log(sql);
 
   var query = connection.query(sql, function(err,rows){
