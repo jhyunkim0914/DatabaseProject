@@ -17,6 +17,19 @@ router.get('/', function(req, res, next) {
   });
 });
 
+router.get('/ownerid=:ownerid', function(req, res, next) {
+  var sql = 'SELECT * FROM candidate candi, contract cont WHERE candi.contractid = cont.contractid AND cont.ownerid= ' + mysql.escape(req.params.ownerid);
+  console.log(sql);
+
+  var query = connection.query(sql, function(err,rows){
+    if (err) {
+      console.error(err);
+    }
+    console.log(rows);
+    res.json(rows);
+  });
+});
+
 /* POST candidate information. */
 router.post('/', function(req, res, next) {
   var user = {

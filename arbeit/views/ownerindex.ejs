@@ -30,13 +30,13 @@
 
       $(document).ready(function(){
         $.ajax({
-            url: "/candidates/requestlist",
+            url: "/candidates/ownerid=<%= user.userid %>",
             data: {
             },
             success: function( result ) {
-              var $table = $("table#worklist tbody");
+              var $table = $("table#ownerlist tbody");
               jQuery.each(result, function(index) {
-                //$table.append($("<tr><td>" + (index+1) + "</td><td>" + this.name + "</td><td>"+ this.companyname + "</td><td id=content"+this.contractid+">"+ this.content //+"</td><td>"+this.phone+"</td></tr>"));
+                table.append($("<tr><td>" + (index+1) + "</td><td>" + this.name + "</td><td>"+ this.companyname + "</td><td id=content"+this.contractid+">"+ this.content +"</td><td>"+this.phone+"</td></tr>"));
                 //console.log(this);
               });
             }
@@ -91,7 +91,7 @@
 
           <h2 class="sub-header">Section title</h2>
           <div class="table-responsive">
-            <table id="worklist" class="table table-striped">
+            <table id="ownerlist" class="table table-striped">
               <thead>
                 <tr>
                   <th>#</th>

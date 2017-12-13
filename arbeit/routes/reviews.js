@@ -20,7 +20,7 @@ router.get('/', function(req, res, next) {
 
 /* GET review by id. */
 router.get('/:id', function(req, res, next) {
-  var sql = 'SELECT * FROM review WHERE id ='+mysql.escape(req.params.id);
+  var sql = 'SELECT * FROM review WHERE reviewid ='+mysql.escape(req.params.id);
   console.log(sql);
 
   var query = connection.query(sql, function(err,rows){
@@ -34,18 +34,16 @@ router.get('/:id', function(req, res, next) {
 
 /* POST review. */
 router.post('/', function(req, res, next) {
-  var user = {
-              'id':req.body.id,
-              'password':req.body.password,
-              'name':req.body.name,
-              'address':req.body.address,
-              'email':req.body.email,
-              'phone':req.body.phone,
-              'companyname':req.body.companyname,
-              'companyid':req.body.companyid,
-              'role':req.body.role
+  var review = {
+              'reviewid':req.body.reviewid,
+              'contractid':req.body.contractid,
+              'content':req.body.content,
+              'reviewstate':req.body.reviewstate,
+              'date':req.body.date,
+              'ratingpoint':req.body.ratingpoint,
+              'userid':req.body.userid
              };
-    var query = connection.query('insert into review set ?',user,function(err,result){
+    var query = connection.query('insert into review set ?',review,function(err,result){
     if (err) {
     console.error(err);
     throw err;
