@@ -18,6 +18,20 @@ router.get('/', function(req, res, next) {
   });
 });
 
+/*Get review lists*/
+router.get('/reviewlist', function(req, res, next) {
+  var sql = 'select u.companyname as companyname, AVG(r.ratingpoint) as rates from Review r join contract c on r.contractid = c.contractid join  user u on c.ownerid = u.companyid group by u.companyname  order by AVG(r.ratingpoint) desc';
+  console.log(sql);
+
+  var query = connection.query(sql, function(err,rows){
+    if (err) {
+      console.error(err);
+    }
+    console.log(rows);
+    res.json(rows);
+  });
+});
+
 /* GET review by id. */
 router.get('/:id', function(req, res, next) {
   var sql = 'SELECT * FROM review WHERE reviewid ='+mysql.escape(req.params.id);

@@ -65,60 +65,57 @@
 
     <script>
 
-      $(document).ready(function(){
-        var startDateString = contract.start_date.getFullYear()+"년 "+contract.start_date.getMonth()+"월 "+contract.start_date.getDate()+"일";
-        var endDateString = contract.end_date.getFullYear()+"년 "+contract.end_date.getMonth()+"월 "+contract.end_date.getDate()+"일";
-        var contDateString = contract.contract_date.getFullYear()+"년 "+contract.contract_date.getMonth()+"월 "+contract.contract_date.getDate()+"일";
-        var workHour = [];
-
-         window.$("span#ownerName").text(owner.name);
-         window.$("span#workerName").text(worker.name);
-         window.$("span#startDate").text(startDateString);
-         window.$("span#endDate").text(endDateString);
-         window.$("p#workAddress").text(owner.address);
-         window.$("p#workContent").text(contract.content);
-                                         //근무 시간 채우기
-                                         var work_time = 0;
-                                         for(var i=0; i<7; i++) {
-                                           var endTime = contract.working_time[2*i+1].split(":");
-                                           var startTime = contract.working_time[2*i].split(":");
-                                           var t2 = new Date();t2.setHours(endTime[1], endTime[0],0,0);
-                                           var t1 = new Date();t1.setHours(startTime[1], startTime[0],0,0);
-                                           workHour = (t2.getTime()-t1.getTime())/1000/60;
-
-                                           window.$("table#worktime tr.startTime td").eq(i+1).text(contract.working_time[2*i]);
-                                           window.$("table#worktime tr.endTime td").eq(i+1).text(contract.working_time[2*i+1]);
-                                           window.$("table#worktime tr.workHour td").eq(i+1).text(workHour+"시간");
-                                         }
-                                         window.$("span#howtoPay").text(contract.howto_pay);
-                                         window.$("span#wage").text(contract.wage);
-                                         window.$("span#bonus").text(contract.bonus);
-                                         window.$("span#otherPay").text(contract.other_pay);
-                                         window.$("span#bonusRate").text(contract.bonus_rate);
-                                        //사회보험 조항 채우기
-
-                                        //socialInsurance의 순서는 고용보험,산재보험,국민연금,건강보험이다.
-                                        //socialInsurance[i]에 따라서 해당 보험 적용, 미적용으로 표현
-                                        var insuranceText = ["고용보험 ","산재보험 ","국민연금 ","건강보험 "];
-                                        for(var i=0; i<4; i++) {
-                                          if(contract.social_insurance[i] == 0)
-                                            insuranceText[i] += "미적용"
-                                          else if(contract.social_insurance[i] == 1)
-                                            insuranceText[i] += "적용"
-                                        }
-                                         window.$("p#insuranceText").text(insuranceText);
-                                         window.$("span#companyName").text(owner.company);
-                                         window.$("span#ownerPhone").text(owner.phone);
-                                         window.$("span#ownerAddress").text(owner.address);
-                                         window.$("span#ownerName2").text(owner.name);
-                                         window.$("span#workerAddress").text(worker.address);
-                                         window.$("span#workerPhone").text(worker.phone);
-                                         window.$("span#workerName2").text(worker.name);
-
-
-                                         callback(null,window.$("*").html());
-
-      });
+      // $(document).ready(function(){
+      //   var startDateString = contract.start_date.getFullYear()+"년 "+contract.start_date.getMonth()+"월 "+contract.start_date.getDate()+"일";
+      //   var endDateString = contract.end_date.getFullYear()+"년 "+contract.end_date.getMonth()+"월 "+contract.end_date.getDate()+"일";
+      //   var contDateString = contract.contract_date.getFullYear()+"년 "+contract.contract_date.getMonth()+"월 "+contract.contract_date.getDate()+"일";
+      //   var workHour = [];
+      //
+      //    window.$("span#ownerName").text(owner.name);
+      //    window.$("span#workerName").text(worker.name);
+      //    window.$("span#startDate").text(startDateString);
+      //    window.$("span#endDate").text(endDateString);
+      //    window.$("p#workAddress").text(owner.address);
+      //    window.$("p#workContent").text(contract.content);
+      //                                    //근무 시간 채우기
+      //    var work_time = 0;
+      //    for(var i=0; i<7; i++) {
+      //      var endTime = contract.working_time[2*i+1].split(":");
+      //      var startTime = contract.working_time[2*i].split(":");
+      //      var t2 = new Date();t2.setHours(endTime[1], endTime[0],0,0);
+      //      var t1 = new Date();t1.setHours(startTime[1], startTime[0],0,0);
+      //      workHour = (t2.getTime()-t1.getTime())/1000/60;
+      //
+      //      window.$("table#worktime tr.startTime td").eq(i+1).text(contract.working_time[2*i]);
+      //      window.$("table#worktime tr.endTime td").eq(i+1).text(contract.working_time[2*i+1]);
+      //      window.$("table#worktime tr.workHour td").eq(i+1).text(workHour+"시간");
+      //    }
+      //    window.$("span#howtoPay").text(contract.howto_pay);
+      //    window.$("span#wage").text(contract.wage);
+      //    window.$("span#bonus").text(contract.bonus);
+      //    window.$("span#otherPay").text(contract.other_pay);
+      //    window.$("span#bonusRate").text(contract.bonus_rate);
+      //   //사회보험 조항 채우기
+      //
+      //   //socialInsurance의 순서는 고용보험,산재보험,국민연금,건강보험이다.
+      //   //socialInsurance[i]에 따라서 해당 보험 적용, 미적용으로 표현
+      //   var insuranceText = ["고용보험 ","산재보험 ","국민연금 ","건강보험 "];
+      //   for(var i=0; i<4; i++) {
+      //     if(contract.social_insurance[i] == 0)
+      //       insuranceText[i] += "미적용"
+      //     else if(contract.social_insurance[i] == 1)
+      //       insuranceText[i] += "적용"
+      //   }
+      //    window.$("p#insuranceText").text(insuranceText);
+      //    window.$("span#companyName").text(owner.company);
+      //    window.$("span#ownerPhone").text(owner.phone);
+      //    window.$("span#ownerAddress").text(owner.address);
+      //    window.$("span#ownerName2").text(owner.name);
+      //    window.$("span#workerAddress").text(worker.address);
+      //    window.$("span#workerPhone").text(worker.phone);
+      //    window.$("span#workerName2").text(worker.name);
+      //
+      // });
 
     </script>
 
@@ -174,7 +171,7 @@
                   <td>단시간근로자 표준근로계약서</td>
                 </tr>
               </table>
-              <p><span id="ownerName">가나다</span>(이하 “사업주”라 함)과(와)<span id="workerName">김우재</span>(이하 “근로자”라 함)은 다음과 같이 근로계약을 체결한다.</p>
+              <p><span id="ownerName"><%= information.ownername %></span>(이하 “사업주”라 함)과(와)<span id="workerName"><%= information.workername %></span>(이하 “근로자”라 함)은 다음과 같이 근로계약을 체결한다.</p>
               <p>1. 근로계약기간 : <span id="startDate"></span>부터  <span id="endDate"></span>까지</p>
               <p class="etc"> ※ 근로계약기간을 정하지 않는 경우에는 “근로개시일”만 기재</p>
               <p>2. 근 무 장 소 : </p>

@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-
+var mysql = require('mysql');
+var connection = mysql.createConnection(require('../config/dbconfig.js'));
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -41,6 +42,27 @@ router.get('/recruitinfo/contractid=:contractid', function(req, res, next) {
 
 router.get('/ownerindex', function(req, res, next) {
   res.render('ownerindex', { user: req.session.user, title: '아르바이트 도우미' });
+});
+
+router.get('/workinfo=:contractid', function(req, res, next) {
+  var sql = "select c.contractid, c.ownerid, c.workerid, owner.name as ownername, worker.name as workername, owner.address as address, owner.companyid as companyid" +
+            ", owner.companyname as companyname"+
+            ",workingtime,wagetiming,wage,bonus,otherpay,bonusrate,payday,howtopay,socialinsurance"+
+            ",DATE_FORMAT(startdate, '%Y-%m-%d') as startdate,DATE_FORMAT(enddate, '%Y-%m-%d') as enddate,DATE_FORMAT(contractdate, '%Y-%m-%d') as contractdate " +
+            "from contract c, user owner, user worker where c.ownerid=owner.userid and c.workerid=worker.userid and c.contractid=" + mysql.escape(req.params.contractid);
+
+  var query = connection.query(sql, function(err,rows){
+    if (err) {
+      console.error(err);
+    }
+    console.log(rows);
+    res.render('workinfo', { information: rows[0], title: '아르바이트 도우미' });
+  });
+
+});
+
+router.get('/reviewlist', function(req, res, next) {
+  res.render('reviewlist', { user: req.session.user, title: '아르바이트 도우미' });
 });
 
 module.exports = router;

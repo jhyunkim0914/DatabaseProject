@@ -4,6 +4,7 @@ var mysql = require('mysql');
 var connection = mysql.createConnection(require('../config/dbconfig.js'));
 
 
+
 /* GET contracts listing. */
 router.get('/', function(req, res, next) {
   var sql = 'SELECT * FROM contract';
@@ -100,7 +101,6 @@ router.post('/', function(req, res, next) {
     console.log(query);
     res.send(200,'success');
     });
-
 });
 
 module.exports = router;
